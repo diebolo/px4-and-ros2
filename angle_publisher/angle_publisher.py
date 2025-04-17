@@ -13,7 +13,7 @@ class AnglePublisher(Node):
         # Declare parameters with descriptors for better documentation
         timer_descriptor = ParameterDescriptor(
             description='Frequency of angle publishing in Hz')
-        self.declare_parameter('timer_frequency', 35.0, timer_descriptor)  # default 2.0 Hz
+        self.declare_parameter('timer_frequency', 70.0, timer_descriptor)  # default 2.0 Hz
         
         # Get the initial parameter value
         timer_freq = self.get_parameter('timer_frequency').value
