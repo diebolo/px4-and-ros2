@@ -1,6 +1,6 @@
 import rclpy
 from rclpy.node import Node
-from rcl_interfaces.msg import ParameterDescriptor
+from rcl_interfaces.msg import ParameterDescriptor, SetParametersResult
 from geometry_msgs.msg import Vector3Stamped
 
 import ADS1x15
@@ -64,14 +64,14 @@ class AnglePublisher(Node):
                 new_freq = param.value
                 if new_freq <= 0:
                     self.get_logger().error(f"Invalid frequency value: {new_freq}. Must be positive.")
-                    return False
+                    return SetParametersResult(successful=False, reason=f"Invalid frequency value: {new_freq}. Must be positive.")
                 
                 # Update timer with new frequency
                 new_period = 1.0 / new_freq
                 self.timer.timer_period_ns = int(new_period * 1e9)  # Convert to nanoseconds
                 self.get_logger().info(f"Updated timer frequency to {new_freq} Hz (period: {new_period:.6f}s)")
         
-        return True
+        return SetParametersResult(successful=True, reason="Parameter updated successfully.")
 
 def main(args=None):
     rclpy.init(args=args)
