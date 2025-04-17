@@ -12,6 +12,7 @@ RUN uv pip install ADS1x15-ADC --system
 # Set up micro-dds-agent
 RUN mkdir -p /px4_uros_uxrce_dds_ws/src
 RUN git clone https://github.com/eProsima/Micro-XRCE-DDS-Agent.git /px4_uros_uxrce_dds_ws/src
+RUN git clone https://github.com/diebolo/px4-and-ros2 /px4_uros_uxrce_dds_ws/src
 
 RUN cd /px4_uros_uxrce_dds_ws && . /opt/ros/${ROS_DISTRO}/setup.sh && colcon build
 
