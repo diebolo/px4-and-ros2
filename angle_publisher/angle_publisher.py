@@ -8,7 +8,7 @@ import ADS1x15
 class AnglePublisher(Node):
     def __init__(self):
         super().__init__('angle_publisher')
-        self.publisher_ = self.create_publisher(Vector3Stamped, '/drone/angle', 10)
+        self.publisher_ = self.create_publisher(Vector3Stamped, '/drone/angles', 10)
         
         # Declare parameters with descriptors for better documentation
         timer_descriptor = ParameterDescriptor(
@@ -26,7 +26,7 @@ class AnglePublisher(Node):
         self.add_on_set_parameters_callback(self.parameters_callback)
         
         # Initialize ADS1x15
-        self.ads = ADS1x15.ADS1115(i2c=1, address=0x48)
+        self.ads = ADS1x15.ADS1115(1, 0x48)
         self.ads.setGain(self.ads.PGA_6_144V)
         self.ads.setDataRate(self.ads.DR_ADS111X_860) 
         self.ads.setMode(self.ads.MODE_SINGLE)
