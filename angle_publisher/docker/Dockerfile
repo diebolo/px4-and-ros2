@@ -4,9 +4,15 @@ ARG ROS_DISTRO=humble
 # Base image
 FROM ros:${ROS_DISTRO}-ros-base
 
+RUN apt-get update && apt-get upgrade -y
+COPY --from=ghcr.io/astral-sh/uv:latest /uv /uvx /bin/
+
+RUN uv pip install ADS1x15-ADC --system
+
 # Set up micro-dds-agent
 RUN mkdir -p /px4_uros_uxrce_dds_ws/src
 RUN git clone https://github.com/eProsima/Micro-XRCE-DDS-Agent.git /px4_uros_uxrce_dds_ws/src
+
 RUN cd /px4_uros_uxrce_dds_ws && . /opt/ros/${ROS_DISTRO}/setup.sh && colcon build
 
 # Source ROS2 and the local workspace
