@@ -38,8 +38,8 @@ class AnglePublisher(Node):
         try:
             angle1 = self.ads.readADC(0)
             angle2 = self.ads.readADC(1)
-            angle3 = self.ads.readADC(2)
-            return angle1, angle2
+            v_ref = self.ads.readADC(2)
+            return angle1, angle2, v_ref
         except Exception as e:
             self.get_logger().error(f"Error reading angles: {str(e)}")
             return None, None
