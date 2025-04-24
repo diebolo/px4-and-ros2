@@ -38,6 +38,7 @@ class AnglePublisher(Node):
         try:
             angle1 = self.ads.readADC(0)
             angle2 = self.ads.readADC(1)
+            angle3 = self.ads.readADC(2)
             return angle1, angle2
         except Exception as e:
             self.get_logger().error(f"Error reading angles: {str(e)}")
@@ -48,14 +49,14 @@ class AnglePublisher(Node):
         msg = Vector3Stamped()
         msg.header.stamp = self.get_clock().now().to_msg()
         msg.header.frame_id = 'base_link'
-        angle1, angle2 = self.read_angles()
+        angle1, angle2, v_ref = self.read_angles()
         
         if angle1 is not None and angle2 is not None:
             msg.vector.x = float(angle1)
             msg.vector.y = float(angle2)
-            msg.vector.z = 0.0
+            msg.vector.z = float(v_ref)
             self.publisher_.publish(msg)
-            self.get_logger().debug(f'Published angles: x={angle1}, y={angle2}')
+            self.get_logger().debug(f'Published angles: x={angle1}, y={angle2}, v_ref={v_ref}')
     
     def parameters_callback(self, params):
         """Callback for parameter changes."""
