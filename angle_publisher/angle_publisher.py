@@ -52,8 +52,8 @@ class AnglePublisher(Node):
         angle1, angle2, v_ref = self.read_angles()
         
         if angle1 is not None and angle2 is not None:
-            msg.vector.x = float(angle1)
-            msg.vector.y = float(angle2)
+            msg.vector.x = float(angle2)
+            msg.vector.y = float(angle1)
             msg.vector.z = float(v_ref)
             self.publisher_.publish(msg)
             self.get_logger().debug(f'Published angles: x={angle1}, y={angle2}, v_ref={v_ref}')
