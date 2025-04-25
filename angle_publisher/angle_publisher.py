@@ -14,6 +14,7 @@ class AnglePublisher(Node):
         timer_descriptor = ParameterDescriptor(
             description='Frequency of angle publishing in Hz')
         self.declare_parameter('timer_frequency', 50.0, timer_descriptor)  # default 50.0 Hz
+        self.declare_parameter('fast_mode', False, ParameterDescriptor(description='Skip reference voltage readout'))
         
         # Get the initial parameter value
         timer_freq = self.get_parameter('timer_frequency').value
@@ -21,6 +22,9 @@ class AnglePublisher(Node):
         
         # Create timer using the period
         self.timer = self.create_timer(timer_period, self.timer_callback)
+
+        # Fast mode, skip reference voltage
+        self.fast_mode = self.get_parameter('timer_frequency').value
         
         # Set up parameter change callback
         self.add_on_set_parameters_callback(self.parameters_callback)
@@ -36,9 +40,12 @@ class AnglePublisher(Node):
     def read_angles(self):
         """Read angles from the ADS1x15."""
         try:
-            angle1 = self.ads.readADC(0)
-            angle2 = self.ads.readADC(1)
-            v_ref = self.ads.readADC(2)
+            angle1 = self.ads.readADC(1)
+            angle2 = self.ads.readADC(0)
+            if not self.fast_mode:
+                v_ref = self.ads.readADC(2)
+            else:
+                v_ref = 26723.21875
             return angle1, angle2, v_ref
         except Exception as e:
             self.get_logger().error(f"Error reading angles: {str(e)}")
@@ -71,7 +78,13 @@ class AnglePublisher(Node):
                 new_period = 1.0 / new_freq
                 self.timer.timer_period_ns = int(new_period * 1e9)  # Convert to nanoseconds
                 self.get_logger().info(f"Updated timer frequency to {new_freq} Hz (period: {new_period:.6f}s)")
-        
+
+            elif param.name == 'fast_mode':
+                self.fast_mode = param.value
+                if self.fast_mode:
+                    self.get_logger().info("Fast mode enabled, skipping reference voltage readout.")
+                else:
+                    self.get_logger().info("Fast mode disabled, reference voltage readout enabled.")
         return SetParametersResult(successful=True, reason="Parameter updated successfully.")
 
 def main(args=None):

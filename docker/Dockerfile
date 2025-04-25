@@ -15,7 +15,7 @@ RUN mkdir -p /px4_uros_uxrce_dds_ws/src
 RUN git clone https://github.com/eProsima/Micro-XRCE-DDS-Agent.git -b v2.4.2 /px4_uros_uxrce_dds_ws/src/micro-xrce-dds-agent
 RUN cd /px4_uros_uxrce_dds_ws && . /opt/ros/${ROS_DISTRO}/setup.sh && colcon build --packages-select microxrcedds_agent
 
-RUN git clone https://github.com/diebolo/px4-and-ros2 /px4_uros_uxrce_dds_ws/src/angle_publ
+RUN git clone https://github.com/diebolo/px4-and-ros2 /px4_uros_uxrce_dds_ws/src/angle_publul
 RUN cd /px4_uros_uxrce_dds_ws && . install/setup.sh && colcon build --packages-select angle_publisher
 
 # Source ROS2 and the local workspace
