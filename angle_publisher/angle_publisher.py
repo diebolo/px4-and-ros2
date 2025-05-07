@@ -2,13 +2,22 @@ import rclpy
 from rclpy.node import Node
 from rcl_interfaces.msg import ParameterDescriptor, SetParametersResult
 from geometry_msgs.msg import Vector3Stamped
+from rclpy.qos import QoSProfile, ReliabilityPolicy, HistoryPolicy, DurabilityPolicy
 
 import ADS1x15
 
 class AnglePublisher(Node):
     def __init__(self):
         super().__init__('angle_publisher')
-        self.publisher_ = self.create_publisher(Vector3Stamped, '/drone/angles', 10)
+
+        qos_profile = QoSProfile(
+            reliability=ReliabilityPolicy.BEST_EFFORT,
+            durability=DurabilityPolicy.TRANSIENT_LOCAL,
+            history=HistoryPolicy.KEEP_LAST,
+            depth=1
+        )
+
+        self.publisher_ = self.create_publisher(Vector3Stamped, '/drone/angles', qos_profile=qos_profile)
         
         # Declare parameters with descriptors for better documentation
         timer_descriptor = ParameterDescriptor(
