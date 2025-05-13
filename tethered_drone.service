@@ -1,0 +1,17 @@
+[Unit]
+Description=uXRCE docker service
+After=docker.service
+Requires=docker.service
+
+[Service]
+TimeoutStartSec=0
+Restart=always
+ExecStartPre=-/usr/bin/docker exec tethered_drone stop
+ExecStartPre=-/usr/bin/docker rm tethered_drone
+ExecStartPre=/usr/bin/docker pull diebolo/drone_angle_publisher
+ExecStart=/usr/bin/docker run --rm --name tethered_drone --net=host --privileged diebolo/drone_angle_publisher serial --dev /dev/ttyAMA0 -b 921600
+TimeoutStopSec=10s
+ExecStop=/usr/bin/docker stop -t 5 tethered_drone
+
+[Install]
+WantedBy=default.target

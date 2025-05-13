@@ -1,3 +1,16 @@
+### Dielofs notes
+I forked this from Anton. Its the uXRCE DDS bridge but I added an angle sensor publisher node to it.
+To deploy any changes first commit to the GitHub repo mentioned in the docker/Dockerfile.
+Then do
+
+```bash
+docker buildx build --platform linux/arm64,linux/amd64 --push -t diebolo/drone_angle_publisher .
+```
+
+This will build the docker image for the arm64 on the drone.
+
+
+
 # PX4 and ROS2
 In this article, we want to provide a step-by-step tutorial on how to get PX4 working with ROS2 in hardware. 
 We explain the process for a Pixhawk 6c and a RaspberryPi 4B but generally speaking, the same process should work for different hardware combinations with minor tweaks.
