@@ -33,7 +33,7 @@ class AnglePublisher(Node):
         self.timer = self.create_timer(timer_period, self.timer_callback)
 
         # Fast mode, skip reference voltage
-        self.fast_mode = self.get_parameter('timer_frequency').value
+        self.fast_mode = self.get_parameter('fast_mode').value
         
         # Set up parameter change callback
         self.add_on_set_parameters_callback(self.parameters_callback)
