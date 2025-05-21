@@ -58,7 +58,7 @@ class AnglePublisher(Node):
             return angle1, angle2, v_ref
         except Exception as e:
             self.get_logger().error(f"Error reading angles: {str(e)}")
-            return None, None
+            return None, None, None
 
     def timer_callback(self): 
         """Timer callback to publish angles."""
